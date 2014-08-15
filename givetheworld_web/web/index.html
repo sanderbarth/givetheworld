@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <!--See http://jqvmap.com/-->
+    <title>Give The World</title>
+
+    <link href="jqvmap/jqvmap.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    <!--TODO: replace by actual jquery lib-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+    <script src="jqvmap/jquery.vmap.js" type="text/javascript"></script>
+    <script src="jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
+    <script src="jqvmap/data/jquery.vmap.sampledata.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#map').vectorMap({
+                map: 'world_en',
+                backgroundColor: '#333333',
+                color: '#ffffff',
+                hoverOpacity: 0.7,
+                selectedColor: '#666666',
+                enableZoom: true,
+                showTooltip: true,
+                values: sample_data,
+                scaleColors: ['#C8EEFF', '#006491'],
+                normalizeFunction: 'polynomial',
+                onRegionClick: function (event, code) {
+                    $.countrySelected(code);
+                }
+            });
+        });
+
+        $.countrySelected = function(countryCode) {
+            $.clearGifts();
+            $.toggleGifts();
+            $.listGifts(countryCode);
+        };
+
+        $.clearGifts = function () {
+            $( "#gifts" ).find('ul').remove();
+        };
+
+        $.toggleGifts = function() {
+//            For now always show gifts
+//            $("#gifts").toggleClass("hidden");
+        };
+
+        $.listGifts = function (countryCode) {
+            var gifts = $.getGifts(countryCode);
+            var list = $("#gifts").append('<ul></ul>').find('ul');
+            $.each(gifts, function( index, value ) {
+                list.append('<li>'+value+'</li>');
+            });
+
+        };
+
+        $.getGifts = function (countryCode) {
+            if ("be" === countryCode) {
+                return [ 'biermand' ];
+            } else {
+                return [ 'bunjee jumpen', 'kokosnoot eten' ];
+            }
+        };
+
+    </script>
+</head>
+<body>
+
+<div class="fullscreen">
+    <div id="gifts" class="gifts"></div>
+    <div id="map" class="map"></div>
+</div>
+
+</body>
+</html>
